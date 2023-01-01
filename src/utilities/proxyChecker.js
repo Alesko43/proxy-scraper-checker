@@ -60,7 +60,6 @@ const makeRequest = async (
   } catch (err) {
     logger(false);
   }
-  return Promise.resolve();
 };
 
 const proxyChecker = async (proxyRepository) => {
