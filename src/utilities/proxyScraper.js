@@ -12,13 +12,13 @@ const scraperLogger = (count) => {
     const end = '\r';
     process.stdout.write(
       yellow('[SCRAPER WORKING]') +
-      ' Scraped count: ' + count +
+      ' Scraped count: ' + green(count) +
       yellow('|') +
-      'Saved: ' + (++stats.saved) +
+      'Saved: ' + green(++stats.saved) +
       yellow('|') +
-      'Unsaved: ' +  (--stats.unsaved) +
+      'Unsaved: ' +  red(--stats.unsaved) +
       yellow('|') +
-      'Progress: ' +  (count === index + 1 ? 100 : progress) + '%' + end
+      'Progress: ' +  green((count === index + 1 ? 100 : progress) + '%' + end)
     );
     if (count === index + 1) {
       return console.log(
@@ -36,25 +36,26 @@ const scraperLogger = (count) => {
 };
 
 const proxySaver = async (proxyRepository, proxies) => {
-  const count = proxies.length;
+  const count = proxies.size;
   const logger = scraperLogger(count);
-  for (const [i, proxy] of proxies.entries()) {
+  let index = 0;
+  for (const proxy of proxies) {
     await proxyRepository.insertScrapedProxy(proxy);
-    logger(i);
+    logger(index++);
   }
 };
 
 const proxyParser = async (proxyRepository, datas) => {
   const parsedData = datas.split(/\s+/);
   const ipPortPattern = /(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5})/;
-  const parsedProxies = [];
+  const uniqueParsedProxies = new Set();
   for (const data of parsedData) {
     const result = ipPortPattern.exec(data);
     if (!result) continue;
     const proxy = result[0];
-    parsedProxies.push(proxy);
+    uniqueParsedProxies.add(proxy);
   }
-  return await proxySaver(proxyRepository, parsedProxies);
+  return await proxySaver(proxyRepository, uniqueParsedProxies);
 };
 
 const proxyScraper = async (proxyRepository, urls) => {
