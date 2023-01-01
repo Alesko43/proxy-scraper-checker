@@ -64,13 +64,8 @@ class ProxyRepository {
   }
 
   async insertScrapedProxy(proxy) {
-    const proxyExistQuery = 'SELECT * FROM proxies WHERE ip = $1';
     const insertProxyQuery = 'INSERT INTO proxies (ip, port) VALUES ($1, $2);';
-
     const [ip, port] = proxy.split(':');
-    const proxyIsExist = await this.query(proxyExistQuery, [ip]);
-
-    if (proxyIsExist.rowCount > 0) return;
     await this.query(insertProxyQuery, [ip, port]);
   }
 
