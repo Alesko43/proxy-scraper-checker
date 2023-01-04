@@ -50,9 +50,9 @@ const proxyParser = async (proxyRepository, datas) => {
   const ipPortPattern = /(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3}:\d{1,5})/;
   const uniqueParsedProxies = new Set();
   for (const data of parsedData) {
-    const result = ipPortPattern.exec(data);
-    if (!result) continue;
-    const proxy = result[0];
+    const include = ipPortPattern.exec(data);
+    if (!include) continue;
+    const proxy = include[0];
     uniqueParsedProxies.add(proxy);
   }
   return await proxySaver(proxyRepository, uniqueParsedProxies);
@@ -74,7 +74,7 @@ const proxyScraper = async (proxyRepository, urls) => {
   }
   await Promise.all(promises);
   saveErrorsToLog(errors);
-  const datasToString = datas.toString();
+  const datasToString = datas.join('');
   return await proxyParser(proxyRepository, datasToString);
 };
 
