@@ -19,7 +19,9 @@
   "main": "main.js",
   "type": "commonjs",
   "scripts": {
-    "start": "node ./src/main.js"
+    "start": "node ./src/main.js",
+    "test": "eslint .",
+    "fix": "eslint . --fix"
   },
   "dependencies": {
     "axios": "^1.2.1",
