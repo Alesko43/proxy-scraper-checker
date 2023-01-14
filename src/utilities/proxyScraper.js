@@ -5,9 +5,9 @@ const SCRAPER_REQ_OPTIONS = require('../options/scraperRequestParam.js');
 const { yellow, green, red } = require('../helpers/Colorer.js');
 const { saveErrorsToLog } = require('../helpers/logSaver.js');
 
-const scraperLogger = (count) => {
+const scraperLogger = count => {
   const stats = { saved: 0, unsaved: count };
-  return (index) => {
+  return index => {
     const progress = ((index / count) * 100).toFixed(1);
     const end = '\r';
     process.stdout.write(
@@ -21,7 +21,7 @@ const scraperLogger = (count) => {
       'Progress: ' +  green((count === index + 1 ? 100 : progress) + '%' + end)
     );
     if (count === index + 1) {
-      return console.log(
+      console.log(
         green('[SCRAPER COMPLETED]') +
         ' Scraped count: ' + green(count) +
         yellow('|') +
@@ -68,8 +68,8 @@ const proxyScraper = async (proxyRepository, urls) => {
   for (const url of uniqueUrls) {
     promises.push(queue(() =>
       axios.get(url, { timeout: 10000, ...SCRAPER_REQ_OPTIONS })
-        .then((res) => datas.push(res.data))
-        .catch((err) => errors[url] = err.message)
+        .then(res => datas.push(res.data))
+        .catch(err => errors[url] = err.message)
     ));
   }
   await Promise.all(promises);

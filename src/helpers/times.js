@@ -1,6 +1,6 @@
 'use strict';
 
-const toMinute = (seconds) => {
+const toMinute = seconds => {
   const minutes = Math.trunc(seconds / 60);
   const remainingSeconds = Math.trunc((seconds / 60 - minutes) * 60);
   return `${minutes}:${remainingSeconds < 10 ? '0' : ''}${remainingSeconds}`;

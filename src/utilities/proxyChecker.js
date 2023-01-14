@@ -4,10 +4,10 @@ const checkerOptions = require('../options/checkerRequestParam.js');
 const pLimit = require('p-limit');
 const { yellow, green, red } = require('../helpers/Colorer.js');
 
-const checkerLogger = (count) => {
+const checkerLogger = count => {
   let index = 0;
   const stats = { success: 0, failed: 0 };
-  return (isSuccess) => {
+  return isSuccess => {
     const progress = ((index++ / count) * 100).toFixed(1);
     process.stdout.write(
       yellow('[CHECKER WORKING]') +
@@ -20,7 +20,7 @@ const checkerLogger = (count) => {
       'Progress: ' + green(progress + '%') + '\r'
     );
     if (count === index) {
-      return console.log(
+      console.log(
         green('[CHECKER COMPLETED]') +
         ' Checking count: ' + green(count) +
         yellow('|') +
@@ -50,9 +50,7 @@ const makeRequest = async (
 
   try {
     const req = await axios.get('http://google.com', proxySettings);
-    if (req.status !== 200) {
-      return;
-    }
+    if (req.status !== 200)  return;
     const geoReq = await axios.get(`http://ip-api.com/json/${ip}`, checkerOptions);
     const { countryCode } = geoReq.data;
     logger(true);
@@ -62,7 +60,7 @@ const makeRequest = async (
   }
 };
 
-const proxyChecker = async (proxyRepository) => {
+const proxyChecker = async proxyRepository => {
   const scrapedProxies = await proxyRepository.getTableData('proxies');
   const checkedProxies = await proxyRepository.getTableData('checked_proxies');
   const proxies = [...checkedProxies, ...scrapedProxies];
