@@ -72,7 +72,7 @@ const proxyScraper = async (proxyRepository, urls) => {
         .catch(err => errors[url] = err.message)
     ));
   }
-  await Promise.all(promises);
+  await Promise.allSettled(promises);
   saveErrorsToLog(errors);
   const datasToString = datas.join('');
   return await proxyParser(proxyRepository, datasToString);

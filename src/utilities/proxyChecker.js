@@ -74,7 +74,7 @@ const proxyChecker = async proxyRepository => {
       makeRequest(proxyRepository, logger, proxy)
     ));
   }
-  return await Promise.all(promises);
+  return await Promise.allSettled(promises);
 };
 
 module.exports = proxyChecker;
